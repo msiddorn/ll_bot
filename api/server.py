@@ -3,6 +3,7 @@
     Backend webapi for the ll bot
 '''
 import requests
+import json
 from bottle import Bottle, abort
 from .bottle_helpers import webapi, picture
 
@@ -20,11 +21,7 @@ class Server:
         ''' start the server '''
         self._app.run(host=self.host, port=self.port)
 
-    @webapi('GET', '/')
-    def home_world(self):
-        return repr(self.spark_headers)
-
-    @webapi('GET', '/seen')
+    @webapi('GET', '/messages')
     def show_message(self):
         return repr(self.last_message)
 
@@ -35,11 +32,9 @@ class Server:
         except KeyError:
             abort(400, 'expected message id')
         api_call = 'https://api.ciscospark.com/v1/messages/{}'.format(message_id)
-        print(api_call)
         r = requests.get(api_call, headers=self.spark_headers)
-        print(r)
-        print(r.text)
-        self.last_message = r.text
+        message_info = json.loads(r.text)
+        self.last_message = message_info['text']
 
     @webapi('POST', '/token')
     def set_token(self, data):
