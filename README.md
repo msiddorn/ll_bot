@@ -1,2 +1,2 @@
-# shylock
-RESTful api for sorting out group spending to make sure you get your pound of flesh
+# ll bot
+RESTful api for playing love letter in a spark room
