@@ -13,7 +13,7 @@ class Server:
         self.port = port
         self._app = Bottle()
 
-    def start(self, use_ssl):
+    def start(self):
         ''' start the server '''
         self._app.run(host=self.host, port=self.port)
 
