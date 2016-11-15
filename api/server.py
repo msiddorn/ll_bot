@@ -34,7 +34,7 @@ class Server:
             message_id = data['data']['id']
         except KeyError:
             abort(400, 'expected message id')
-        api_call = 'https://api.ciscospark.com/vi/messages/{}'.format(message_id)
+        api_call = 'https://api.ciscospark.com/v1/messages/{}'.format(message_id)
         print(api_call)
         r = requests.get(api_call, headers=self.spark_headers)
         print(r)
