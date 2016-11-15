@@ -28,4 +28,4 @@ class Server:
 
     @picture('/images/letter')
     def letter_pic(self):
-        return 'letter.jpg'
+        return 'letter_big.jpg'
