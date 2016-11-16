@@ -28,5 +28,6 @@ class LoveLetter:
             'roomId': room_id,
             'text': 'There is no helping you yet',
         }
+        print(data)
         r = requests.get(api_call, data=json.dumps(data), headers=self.spark_headers)
         print(r)
