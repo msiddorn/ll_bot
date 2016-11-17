@@ -4,30 +4,57 @@
 '''
 import re
 import requests
-import json
+from functool import partial
+# import json
 
 
-class LoveLetter:
+class LoveLetterFactory:
     ''' main game object '''
+
+    help_text = "I'm afraid i cannot help you yet."
+
+    new_game_pattern = '(?i)@ll ?first to (\d)+'
+    help_pattern = '(?i)@ll ?help'
+
+    API_CALLS = {
+        'new_message': partial(requests.post, 'https://api.ciscospark.com/v1/messages')
+    }
 
     def __init__(self):
         self.spark_headers = ''
-        self.new_game_pattern = '(?i)@ll ?first to (\d)+'
-        self.help_pattern = '(?i)@ll ?help'
+        self.games_in_progress = []
 
     def get_players(self):
         return 'Mark'
 
     def parse_message(self, message):
-        if re.match(self.help_pattern, message['text']):
-            self.send_help(message['roomId'])
+        room = message['roomId']
+        if room in self.games_in_progress:
+            pass
+        else:
+            if re.match(self.help_pattern, message['text']):
+                self.send_help(room)
+                return
+            match = re.match(self.new_game_pattern)
+            if match:
+                self.start_game(room, int(match.group(1)))
 
-    def send_help(self, room_id):
-        api_call = 'https://api.ciscospark.com/v1/messages'
+    def start_game(self, room_id, rounds):
         data = {
             'roomId': room_id,
-            'text': 'There is no helping you yet',
+            'text': 'you want to play {} rounds?'.format(rounds),
         }
-        print(data)
-        r = requests.get(api_call, data=json.dumps(data), headers=self.spark_headers)
-        print(r)
+        self.API_CALLS['new_message'](data=data, headers=self.spark_headers)
+
+    def send_help(self, room_id):
+        data = {
+            'roomId': room_id,
+            'text': self.help_text,
+        }
+        self.API_CALLS['new_message'](data=data, headers=self.spark_headers)
+
+
+class LoveLetter:
+
+    def __init__(self, rounds, players, room_id, auth_headers):
+        pass
