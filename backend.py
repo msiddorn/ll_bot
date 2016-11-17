@@ -43,23 +43,23 @@ class LoveLetterFactory:
         self.games_in_progress = {}
 
     def parse_message(self, message):
-        room = message['roomId']
-        sender = message['personId']
-        # all messages must mention the bot so will always have a html field
-        html = message['html']
-        print(html)
+        try:
+            room = message['roomId']
+            sender = message['personId']
+            html = message['html']
+        except KeyError:
+            # I need all of those so do nothing otherwise
+            return
 
         # swap all mentions for the person_id
         text = re.sub(self.MENTION_REGEX, '\g<1>', html)
-        print(text)
 
         # remove mentions of the bot and strip whitespace
         text = re.sub(self.PERSON_ID, '', text).strip()
-        print(text)
 
         # deal with cancel
         if re.match(self.cancel_pattern, text):
-            self.cancel(room, sender)
+            self.cancel_game(room, sender)
             return
 
         # Games which are in progress
@@ -93,6 +93,7 @@ class LoveLetterFactory:
         else:
             # Create a game
             match = re.match(self.new_game_pattern, text)
+            print(match.groups)
             if match:
                 self.new_game(room, sender, int(match.group(1)), match.group(2))
 
