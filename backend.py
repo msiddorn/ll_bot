@@ -47,12 +47,15 @@ class LoveLetterFactory:
         sender = message['personId']
         # all messages must mention the bot so will always have a html field
         html = message['html']
+        print(html)
 
         # swap all mentions for the person_id
         text = re.sub(self.MENTION_REGEX, '\g<1>', html)
+        print(text)
 
         # remove mentions of the bot and strip whitespace
         text = re.sub(self.PERSON_ID, '', text).strip()
+        print(text)
 
         # deal with cancel
         if re.match(self.cancel_pattern, text):
