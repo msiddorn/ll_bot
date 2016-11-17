@@ -31,7 +31,7 @@ class LoveLetterFactory:
     cancel_pattern = '(?i)cancel'
 
     # spark stuff
-    MENTION_REGEX = r'<spark-mention.*?data-object-id=\\\"(\w+)\\\".*?spark-mention>'
+    MENTION_REGEX = r'<spark-mention.*?data-object-id="(\w+)".*?spark-mention>'
     PERSON_ID = 'Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jZjE5OTU0OC05MzE1LTQ2NjktOGJmYy03MmNjMGNiYjc0NWQ'
     API_CALLS = {
         'new_message': partial(requests.post, 'https://api.ciscospark.com/v1/messages')
