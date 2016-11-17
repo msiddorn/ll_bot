@@ -4,7 +4,7 @@
 '''
 import re
 import requests
-from functool import partial
+from functools import partial
 # import json
 
 
