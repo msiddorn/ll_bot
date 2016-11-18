@@ -155,15 +155,14 @@ class LoveLetterFactory:
 
     def cancel_game(self, room, sender):
         print('saw cancel game')
-        game = self.games_in_progress.get(room)
-        if game:
-            if sender == game['owner']:
-                self.games_in_progress = {k: v for k, v in self.games_in_progress if k != room}
-            else:
-                self.send_message(room, 'Only the creater of the game can end it prematurely')
-        game = self.games_in_setup.get(room)
-        if game:
-            if sender == game['owner']:
-                self.games_in_setup = {k: v for k, v in self.games_in_setup if k != room}
-            else:
-                self.send_message(room, 'Only the creater of the game can end it prematurely')
+        for game_type in ('games_in_setup', 'games_in_progress'):
+            game_dict = getattr(self, game_type)
+            game = game_dict.get(room)
+            if game:
+                if sender == game['owner']:
+                    setattr(self, game_type, {
+                        k: v for k, v in game_dict.items()
+                        if k != room
+                    })
+                else:
+                    self.send_message(room, 'Only the creater of the game can end it prematurely')
