@@ -86,7 +86,7 @@ class LoveLetterFactory:
             # Join a game
             match = re.match(self.join_pattern, text)
             if match:
-                self.join(room, sender, match.group(1))
+                self.join_game(room, sender, match.group(1))
             # Change nickname
             match = re.match(self.nickname_pattern, text)
             if match:
