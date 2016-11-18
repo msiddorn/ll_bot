@@ -57,6 +57,8 @@ class LoveLetterFactory:
         # remove mentions of the bot and strip whitespace
         text = re.sub(self.PERSON_ID, '', text).strip()
 
+        print('Saw message - {}'.format(text))
+
         # deal with cancel
         if re.match(self.cancel_pattern, text):
             self.cancel_game(room, sender)
@@ -93,7 +95,7 @@ class LoveLetterFactory:
         else:
             # Create a game
             match = re.match(self.new_game_pattern, text)
-            print(match.groups)
+            print(match.groups())
             if match:
                 self.new_game(room, sender, int(match.group(1)), match.group(2))
 
@@ -104,7 +106,8 @@ class LoveLetterFactory:
         }
         self.API_CALLS['new_message'](data=data, headers=self.spark_headers)
 
-    def new_game(self, sender, room, rounds, nickname):
+    def new_game(self, room, sender, rounds, nickname):
+        print('saw new game')
         aliases = {}
         if nickname is not None:
             aliases[sender] = nickname
@@ -117,6 +120,7 @@ class LoveLetterFactory:
         self.send_message(room, 'New game created with {} rounds'.format(rounds))
 
     def join_game(self, room, sender, nickname):
+        print('saw join game')
         game = self.games_in_setup[room]
         if sender in game['players']:
             self.send_message(room, 'You can\'t join the same game twice')
@@ -127,6 +131,7 @@ class LoveLetterFactory:
         game['players'].append(sender)
 
     def change_nickname(self, room, sender, nickname):
+        print('saw nickname')
         game = self.games_in_setup[room]
         if sender not in game['players']:
             self.send_message(room, 'If you\'re not in the game I don\'t care what you\'re called')
@@ -134,6 +139,7 @@ class LoveLetterFactory:
         game['aliases'][sender] = nickname
 
     def start_game(self, room, sender):
+        print('saw start game')
         game = self.games_in_setup[room]
         if sender == game['owner']:
             if len(game['players']) <= 1:
@@ -148,6 +154,7 @@ class LoveLetterFactory:
             self.send_message(room, 'Only the creator of the game can start it')
 
     def cancel_game(self, room, sender):
+        print('saw cancel game')
         game = self.games_in_progress.get(room)
         if game:
             if sender == game['owner']:

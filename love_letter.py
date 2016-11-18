@@ -47,3 +47,12 @@ class LoveLetter:
         else:
             data['toPersonId'] = person
         self.API_CALLS['new_message'](data=data, headers=self.spark_headers)
+
+    def __repr__(self):
+        info = {
+            'players': self.players,
+            'aliases': self.aliases,
+            'win_score': self.win_score,
+        }
+        return repr(info)
+

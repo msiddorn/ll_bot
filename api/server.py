@@ -43,3 +43,16 @@ class Server:
     @picture('/images/letter')
     def letter_pic(self):
         return 'letter_big.jpg'
+
+    @webapi('GET', '/debug/<room>')
+    def debug_room(self, room):
+        result = (
+            'Games in progress\n'
+            '  {}\n\n'
+            'Games in setup\n'
+            '  {}'.format(
+                self.game_maker.games_in_progress.get(room),
+                self.games_in_setup.get(room),
+            )
+        )
+        return result
