@@ -52,7 +52,7 @@ class Server:
             'Games in setup\n'
             '  {}'.format(
                 self.game_maker.games_in_progress.get(room),
-                self.games_in_setup.get(room),
+                self.game_maker.games_in_setup.get(room),
             )
         )
         return result
