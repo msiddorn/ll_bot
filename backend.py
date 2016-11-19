@@ -78,6 +78,7 @@ class LoveLetterFactory:
                     k: v for k, v in self.games_in_progress.items()
                     if k != room
                 }
+            return
 
         # Out of game help
         if re.match(self.help_pattern, text):
@@ -142,7 +143,9 @@ class LoveLetterFactory:
         if sender not in game['players']:
             self.send_message(room, 'If you\'re not in the game I don\'t care what you\'re called')
             return
-        game['aliases'][sender] = nickname
+        else:
+            game['aliases'][sender] = nickname
+            self.send_message(room, 'Nickname set')
 
     def start_game(self, room, sender):
         print('saw start game')
@@ -160,12 +163,12 @@ class LoveLetterFactory:
             self.send_message(room, 'Only the creator of the game can start it')
 
     def cancel_game(self, room, sender):
-        print('saw cancel game')
         for game_type in ('games_in_setup', 'games_in_progress'):
             game_dict = getattr(self, game_type)
             game = game_dict.get(room)
             if game:
                 if sender == game['owner']:
+                    self.send_message(room, 'Game cancelled')
                     setattr(self, game_type, {
                         k: v for k, v in game_dict.items()
                         if k != room

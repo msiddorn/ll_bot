@@ -149,9 +149,13 @@ class LoveLetter:
             self.next_turn()
             return
 
-        # 7 - 5/6 combo
+        if card in [5, 6] and 7 in self.turn.hand:
+            self.send_message('I\'m sorry but you have to play your 7')
+            return
 
+        # card is played and gone at this point
         self.turn.hand.remove(card)
+
         if card in [1, 2, 3, 6]:  # can be nulled by handmaidens
             if len([p for p in self.round_players if not p.protected if p != self.turn]) < 1:
                 self.send_message('Everyone else is either hiding or out')
