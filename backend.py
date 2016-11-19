@@ -72,11 +72,16 @@ class LoveLetterFactory:
                         room,
                         'Operation not allowed whilst there is a game in progress in this room'
                     )
-            self.games_in_progress[room].parse_message(text, sender)
+            finished = self.games_in_progress[room].receive_message(text, sender)
+            if finished:
+                self.games_in_progress = {
+                    k: v for k, v in self.games_in_progress.items()
+                    if k != room
+                }
 
         # Out of game help
         if re.match(self.help_pattern, text):
-            self.send_message(room, self.help_text)
+            self.send_message(room, self.help_text, markdown=True)
 
         # Games being set up
         if room in self.games_in_setup:
@@ -99,11 +104,12 @@ class LoveLetterFactory:
             if match:
                 self.new_game(room, sender, int(match.group(1)), match.group(2))
 
-    def send_message(self, room, text):
-        data = {
-            'roomId': room,
-            'text': text,
-        }
+    def send_message(self, room, text, markdown=False):
+        data = {'roomId': room}
+        if markdown:
+            data['markdown'] = text
+        else:
+            data['text'] = text
         self.API_CALLS['new_message'](data=data, headers=self.spark_headers)
 
     def new_game(self, room, sender, rounds, nickname):

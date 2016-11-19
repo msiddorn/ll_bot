@@ -47,10 +47,8 @@ class Server:
     @webapi('GET', '/debug/<room>')
     def debug_room(self, room):
         result = (
-            'Games in progress<br>'
-            '  {}<br/><br/>'
-            'Games in setup<br/>'
-            '  {}'.format(
+            'Games in progress: {}, '
+            'Games in setup: {}'.format(
                 self.game_maker.games_in_progress.get(room),
                 self.game_maker.games_in_setup.get(room),
             )
