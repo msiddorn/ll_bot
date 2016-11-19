@@ -16,12 +16,12 @@ class LoveLetter:
 
     # play and nominate at the same time
 
-    def __init__(self, spark_headers, room, players, rounds):
+    def __init__(self, spark_headers, room, players, aliases, rounds):
         self.spark_headers = spark_headers
         self.room = room
         self.finished = False
 
-        self.players = [Player(p_id, self.spark_headers) for p_id in players]
+        self.players = [Player(p_id, self.spark_headers, aliases.get(p_id)) for p_id in players]
         shuffle(self.players)
         self.turn_order = cycle(self.players)
 

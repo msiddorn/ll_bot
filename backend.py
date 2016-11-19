@@ -136,9 +136,14 @@ class LoveLetterFactory:
         if nickname is not None:
             aliases[sender] = nickname
         game['players'].append(sender)
+        self.send_message(
+            room,
+            'successfully joined. There are currently {} players'.format(len(game['players']))
+        )
+        if len(game['players']) == 4:
+            self.start_game(room, game['owner'])
 
     def change_nickname(self, room, sender, nickname):
-        print('saw nickname')
         game = self.games_in_setup[room]
         if sender not in game['players']:
             self.send_message(room, 'If you\'re not in the game I don\'t care what you\'re called')
@@ -148,7 +153,6 @@ class LoveLetterFactory:
             self.send_message(room, 'Nickname set')
 
     def start_game(self, room, sender):
-        print('saw start game')
         game = self.games_in_setup[room]
         if sender == game['owner']:
             if len(game['players']) <= 1:
