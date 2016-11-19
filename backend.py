@@ -158,7 +158,7 @@ class LoveLetterFactory:
             if len(game['players']) <= 1:
                 self.send_message(room, 'There must be at least 2 players in order to begin')
             else:
-                self.games_in_progress[room] = LoveLetter(self.spark_headers, **game)
+                self.games_in_progress[room] = LoveLetter(self.spark_headers, room, **game)
                 self.send_message(room, 'Game started with {} players. First to {} wins'.format(
                     len(game['players']),
                     game['rounds'],
