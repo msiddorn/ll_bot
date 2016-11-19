@@ -16,7 +16,7 @@ class LoveLetter:
 
     # play and nominate at the same time
 
-    def __init__(self, spark_headers, room, players, aliases, rounds):
+    def __init__(self, spark_headers, room, players, owner, aliases, rounds):
         self.spark_headers = spark_headers
         self.room = room
         self.finished = False
