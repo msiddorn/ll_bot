@@ -37,6 +37,7 @@ class LoveLetter:
             player.hand = [card]
             self.round_players.append(player)
             self.send_message('You have been dealt a {}'.format(card), person=player.id)
+        self.turn = next(self.turn_order)
         self.next_turn()
 
     def receive_message(self, text, player):
