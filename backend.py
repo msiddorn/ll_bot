@@ -3,9 +3,8 @@
     Implementation of the love letter game
 '''
 import re
-import requests
-from functools import partial
 from love_letter import LoveLetter
+from bot_helpers import MENTION_REGEX, PERSON_ID, API_CALLS
 
 
 class LoveLetterFactory:
@@ -30,13 +29,6 @@ class LoveLetterFactory:
     start_pattern = '(?i)start'
     cancel_pattern = '(?i)cancel'
 
-    # spark stuff
-    MENTION_REGEX = r'<spark-mention.*?data-object-id="(\w+)".*?spark-mention>'
-    PERSON_ID = 'Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jZjE5OTU0OC05MzE1LTQ2NjktOGJmYy03MmNjMGNiYjc0NWQ'
-    API_CALLS = {
-        'new_message': partial(requests.post, 'https://api.ciscospark.com/v1/messages')
-    }
-
     def __init__(self):
         self.spark_headers = ''
         self.games_in_setup = {}
@@ -52,10 +44,10 @@ class LoveLetterFactory:
             return
 
         # swap all mentions for the person_id
-        text = re.sub(self.MENTION_REGEX, '\g<1>', html)
+        text = re.sub(MENTION_REGEX, '\g<1>', html)
 
         # remove mentions of the bot and strip whitespace
-        text = re.sub(self.PERSON_ID, '', text).strip()
+        text = re.sub(PERSON_ID, '', text).strip()
 
         print('Saw message - {}'.format(text))
 
@@ -111,7 +103,7 @@ class LoveLetterFactory:
             data['markdown'] = text
         else:
             data['text'] = text
-        self.API_CALLS['new_message'](data=data, headers=self.spark_headers)
+        API_CALLS['create_message'](data=data, headers=self.spark_headers)
 
     def new_game(self, room, sender, rounds, nickname):
         print('saw new game')

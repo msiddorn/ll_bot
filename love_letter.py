@@ -1,13 +1,13 @@
 '''
     In game workings of lover letter
 '''
-import requests
 from random import shuffle
 from itertools import cycle
 from functools import partial
 from copy import copy
 import json
 import re
+from bot_helpers import API_CALLS
 
 
 class LoveLetter:
@@ -54,7 +54,7 @@ class LoveLetter:
             data['roomId'] = self.room
         else:
             data['toPersonId'] = person
-        self.API_CALLS['new_message'](data=data, headers=self.spark_headers)
+        API_CALLS['create_message'](data=data, headers=self.spark_headers)
 
     def end_round(self, winner=None):
         if winner is None:
@@ -270,10 +270,7 @@ class Player:
     @property
     def name(self):
         if self.alias is None:
-            r = requests.get(
-                'https://api.ciscospark.com/v1/people/{}'.format(self.id),
-                headers=self.spark_headers,
-            )
+            r = API_CALLS['get_person_details'](headers=self.spark_headers, person_id=self.id)
             if r.status_code == 200:
                 person_info = json.loads(r.text)
                 if 'firstName' in person_info:
