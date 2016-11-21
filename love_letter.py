@@ -260,7 +260,7 @@ class LoveLetter:
 
 class Player:
 
-    def __init__(self, p_id, spark_headers, alias=None):
+    def __init__(self, p_id, spark_headers, alias):
         self.id = p_id
         self.spark_headers = spark_headers
         self.alias = alias

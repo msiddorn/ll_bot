@@ -32,7 +32,10 @@ class Server:
         api_call = 'https://api.ciscospark.com/v1/messages/{}'.format(message_id)
         r = requests.get(api_call, headers=self.spark_headers)
         message_info = json.loads(r.text)
-        self.game_maker.parse_message(message_info)
+        try:
+            self.game_maker.parse_message(message_info)
+        except Exception as err:
+            print('Ignored exception {}'format.err)
 
     @webapi('POST', '/token')
     def set_token(self, data):
