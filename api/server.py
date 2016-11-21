@@ -35,7 +35,7 @@ class Server:
         try:
             self.game_maker.parse_message(message_info)
         except Exception as err:
-            print('Ignored exception {}'format.err)
+            print(err)
 
     @webapi('POST', '/token')
     def set_token(self, data):
