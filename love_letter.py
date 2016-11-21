@@ -132,22 +132,23 @@ class LoveLetter:
             self.send_message('Expecting a card from 1-8')
             return
         card = int(text)
-        if card not in self.turn.hand:
-            self.send_message('Shame you don\'t have a {}'.format(card))
-            return
         if guessing_player is not None:
             if card == guessing_player.card:
                 self.send_message('Correctly guessed {} had a {}. They are out!'.format(
-                    guessing_player.tag,
+                    guessing_player.name,
                     card
                 ))
                 self.round_players.remove(guessing_player)
             else:
                 self.send_message('Guessed incorrectly. {}\ does not have {}'.format(
-                    guessing_player.tag,
+                    guessing_player.name,
                     card
                 ))
             self.next_turn()
+            return
+
+        if card not in self.turn.hand:
+            self.send_message('Shame you don\'t have a {}'.format(card))
             return
 
         if card in [5, 6] and 7 in self.turn.hand:
@@ -194,7 +195,7 @@ class LoveLetter:
             self.send_message('I don\'t know who that is. You can tag them or use their nickname')
             return
         if target.protected:
-            self.send_message('{} is protected by a handmaided. Try someone else'.format(
+            self.send_message('{} is protected by a handmaiden. Try someone else'.format(
                 target.name
             ))
             return

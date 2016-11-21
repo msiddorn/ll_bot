@@ -28,6 +28,7 @@ class LoveLetterFactory:
     join_pattern = '(?i)join(?: as )?(\w+)?'
     start_pattern = '(?i)start'
     cancel_pattern = '(?i)cancel'
+    scores_pattern = '(?i)scores'
 
     def __init__(self):
         self.spark_headers = ''
@@ -64,6 +65,9 @@ class LoveLetterFactory:
                         room,
                         'Operation not allowed whilst there is a game in progress in this room'
                     )
+            if re.match(self.scores_pattern, text):
+                self.games_in_progress[room].show_scores()
+                return
             finished = self.games_in_progress[room].receive_message(text, sender)
             if finished:
                 self.games_in_progress = {
