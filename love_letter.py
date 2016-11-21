@@ -144,7 +144,7 @@ class LoveLetter:
                 ))
                 self.round_players.remove(guessing_player)
             else:
-                self.send_message('Guessed incorrectly. {} does not have {}'.format(
+                self.send_message('Guessed incorrectly. {} does not have a {}'.format(
                     guessing_player.name,
                     card
                 ))

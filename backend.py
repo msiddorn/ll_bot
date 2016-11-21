@@ -140,13 +140,26 @@ class LoveLetterFactory:
             self.start_game(room, game['owner'])
 
     def change_nickname(self, room, sender, nickname):
-        game = self.games_in_setup[room]
-        if sender not in game['players']:
-            self.send_message(room, 'If you\'re not in the game I don\'t care what you\'re called')
-            return
-        else:
-            game['aliases'][sender] = nickname
-            self.send_message(room, 'Nickname set')
+        game = self.games_in_progress.get(room)
+        if game is not None:
+            players = [player for player in game.players if player.id == sender]
+            if not players:
+                self.send_message(room, 'Why would I need to know your name?')
+                return
+            else:
+                player = players[0]
+                player.alias = nickname
+                self.send_message(room, 'Nickname set')
+            game.players[sender].alias = nickname
+
+        game = self.games_in_setup.get(room)
+        if game is not None:
+            if sender not in game['players']:
+                self.send_message(room, 'If you\'re not in the game I don\'t care what you\'re called')
+                return
+            else:
+                game['aliases'][sender] = nickname
+                self.send_message(room, 'Nickname set')
 
     def start_game(self, room, sender):
         game = self.games_in_setup[room]
