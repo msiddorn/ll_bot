@@ -173,7 +173,7 @@ class LoveLetter:
                 3: 'challenge',
                 6: 'swap with yours',
             }[card]
-            self.send_message('Who\'s card do you want to {}?'.format(action))
+            self.send_message('Whose card do you want to {}?'.format(action))
             self.current_play_function = partial(self.get_target, card)
         elif card == 4:
             self.send_message('Coward')
@@ -210,7 +210,7 @@ class LoveLetter:
         elif card == 2:
             self.send_message(
                 '{} has a {}'.format(target.name, target.card),
-                player=self.turn.id,
+                person=self.turn.id,
             )
         elif card == 3:
             if self.turn.card < target.card:
