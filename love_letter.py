@@ -33,7 +33,7 @@ class LoveLetter:
         shuffle(self.deck)
         if len(self.players) == 2:
             discards = [self.deck.pop() for _ in range(3)]
-            self.send_message('Discarded cards are {}, {}, and {}'.format(**discards))
+            self.send_message('Discarded cards are {}, {}, and {}'.format(*discards))
         self.round_players = []
         for player in self.players:
             card = self.deck.pop()
