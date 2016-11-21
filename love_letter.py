@@ -31,6 +31,9 @@ class LoveLetter:
     def start_round(self):
         self.deck = copy(self.STARTING_DECK)
         shuffle(self.deck)
+        if len(self.players) == 2:
+            discards = [self.deck.pop() for _ in range(3)]
+            self.send_message('Discarded cards are {}, {}, and {}'.format(**discards))
         self.round_players = []
         for player in self.players:
             card = self.deck.pop()
@@ -144,8 +147,9 @@ class LoveLetter:
                 ))
                 self.round_players.remove(guessing_player)
             else:
-                self.send_message('Guessed incorrectly. {} does not have a {}'.format(
+                self.send_message('Guessed incorrectly. {} does not have {} {}'.format(
                     guessing_player.name,
+                    'a' if card in [] else 'an',
                     card
                 ))
             self.next_turn()
@@ -245,7 +249,7 @@ class LoveLetter:
         elif card == 5:
             self.send_message('{} had to discard {}'.format(
                 target.name,
-                target.card[0],
+                target.card,
             ))
             if target.card == 8:
                 self.send_message('{} is out!'.format(target.name))
