@@ -129,10 +129,14 @@ class LoveLetter:
     def get_card(self, text, guessing_player=None):
         match = re.match('[1-8]', text)
         if not match:
-            self.send_message('Expecting a card from 1-8')
+            self.send_message('Expecting a card from {}-8'.format(
+                1 if guessing_player is None else 2)
+            )
             return
         card = int(text)
         if guessing_player is not None:
+            if card == 1:
+                self.send_message('Sorry you can only guess cards 2-8')
             if card == guessing_player.card:
                 self.send_message('Correctly guessed {} had a {}. They are out!'.format(
                     guessing_player.name,
