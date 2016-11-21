@@ -212,6 +212,10 @@ class LoveLetter:
                 '{} has a {}'.format(target.name, target.card),
                 person=self.turn.id,
             )
+            self.send_message('{} has seen {}\'s card'.format(
+                self.turn.name,
+                target.name,
+            ))
         elif card == 3:
             if self.turn.card < target.card:
                 self.round_players.remove(self.turn)
